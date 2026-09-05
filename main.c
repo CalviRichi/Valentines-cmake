@@ -386,6 +386,9 @@ int main()
     }
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // default screen color
+   //glEnable(GL_POINT_SMOOTH);
+   //glEnable(GL_BLEND);
+   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0, SCREEN_WIDTH, SCREEN_HEIGHT, 0, -1, 1);
@@ -455,7 +458,7 @@ int main()
 
     // GAME LOOP
 
-    Mix_Music* music = Mix_LoadMUS("dependencies/assets/StealmyHeart_Music.wav");
+    Mix_Music* music = Mix_LoadMUS(ASSETS_DIR "/StealmyHeart_Music.wav");
     if (!music) {
         printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
     }
@@ -534,7 +537,7 @@ int main()
                     
                     if (animation == 0) {
                         if (hM->map[dChange] == 4) { // start the animation
-                            playSoundEffect("dependencies/assets/shatter.wav", GUNSHOT);
+                            playSoundEffect(ASSETS_DIR "/shatter.wav", GUNSHOT);
                             hM->map[dChange] = 6;
                         }
                         else if (hM->map[dChange] == 12) {
@@ -544,7 +547,7 @@ int main()
                         }
 
                         if (hM->map[dChange] == 3) { // start the animation
-                            playSoundEffect("dependencies/assets/shatter.wav", GUNSHOT);
+                            playSoundEffect(ASSETS_DIR "/shatter.wav", GUNSHOT);
                             hM->map[dChange] = 7;
                         }
                         else {
@@ -621,7 +624,7 @@ int main()
                         }
                         
                     }
-                    drawSprite(hS, player, *hM, &flashTimer, &deltaTime, depth);   
+                    drawSprite(hS, player, *hM, &flashTimer, deltaTime, depth);   
                     hS = hS->next;
                 }
 
@@ -681,7 +684,7 @@ int main()
 
                 if (d == -2) { // trigger for progressing
                     if (level == LEVEL_ONE) {
-                        playSoundEffect("dependencies/assets/item.wav", ITEM);
+                        playSoundEffect(ASSETS_DIR "/item.wav", ITEM);
                         level = LEVEL_TWO;
                         hM = hM->next;
                         player.heartCounter = 0;
@@ -690,7 +693,7 @@ int main()
                         levelInit(&headSprite);
                     }
                     else if (level == LEVEL_TWO) {
-                        playSoundEffect("dependencies/assets/item.wav", ITEM);
+                        playSoundEffect(ASSETS_DIR "/item.wav", ITEM);
                         level = LEVEL_THREE;
                         hM = hM->next;
                         hM->map = hM->m[1];
@@ -700,7 +703,7 @@ int main()
                         levelInit(&headSprite);
                     }
                     else if (level == LEVEL_THREE) {
-                        playSoundEffect("dependencies/assets/item.wav", ITEM);
+                        playSoundEffect(ASSETS_DIR "/item.wav", ITEM);
                         //printf("test\n");
                         gamestate = END_SCREEN;
                         printf("\nI love you baby, you're so so good and smart\n");
@@ -718,7 +721,7 @@ int main()
                         continue;
                     }
                     else if (level == LEVEL_TWO) {
-                        playSoundEffect("dependencies/assets/item.wav", ITEM);
+                        playSoundEffect(ASSETS_DIR "/item.wav", ITEM);
                         level = LEVEL_ONE;
                         player.heartCounter = 0;
                         hM = hM->previous;
@@ -728,7 +731,7 @@ int main()
                         levelInit(&headSprite);
                     }
                     else if (level == LEVEL_THREE) {
-                        playSoundEffect("dependencies/assets/item.wav", ITEM);
+                        playSoundEffect(ASSETS_DIR "/item.wav", ITEM);
                         level = LEVEL_TWO;
                         player.heartCounter = 0;
                         hM = hM->previous;
@@ -744,7 +747,7 @@ int main()
                 if (deathTrigger) {
                     
                     gamestate = GAME_OVER;
-                    playSoundEffect("dependencies/assets/game_over.mp3", STEP);
+                    playSoundEffect(ASSETS_DIR "/game_over.wav", STEP);
                     printf("\nIt'll be ok <3 --- You can press 'Enter' to play again\n\n");
                     deathTrigger = 0;
                 }
@@ -800,12 +803,12 @@ int main()
                         heartMoving = TRUE;
                         gameOverHeart->x_direction = TRUE;
                         gameOverHeart2->x_direction = FALSE;
-                        playSoundEffect("dependencies/assets/shatter.wav", GUNSHOT);
+                        playSoundEffect(ASSETS_DIR "/shatter.wav", GUNSHOT);
                     }
                     else if (gameOverHeart->color < 4) {
                         //printf("hi\n");
                         gameOverHeart->color = 4;
-                        playSoundEffect("dependencies/assets/heartbreak.wav", GUNSHOT);
+                        playSoundEffect(ASSETS_DIR "/heartbreak.wav", GUNSHOT);
                     }
                     third_animation = 0;
                 }

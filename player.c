@@ -11,22 +11,22 @@ void shootGun(Sprite * s, Player * p, int bTravel, int * flashTimer, Map * m) {
         int a = rand() % 4;
         switch (a) {
         case 0:
-            if (playSoundEffect("dependencies/assets/meow_1.mp3", GUNSHOT)) {
+            if (playSoundEffect(ASSETS_DIR "/meow_1.wav", GUNSHOT)) {
                 printf("something went wrong!\n");
             }
             break;
         case 1:
-            if (playSoundEffect("dependencies/assets/meow_2.mp3", GUNSHOT)) {
+            if (playSoundEffect(ASSETS_DIR "/meow_2.wav", GUNSHOT)) {
                 printf("something went wrong!\n");
             }
             break;
         case 2:
-            if (playSoundEffect("dependencies/assets/meow_3.mp3", GUNSHOT)) {
+            if (playSoundEffect(ASSETS_DIR "/meow_3.wav", GUNSHOT)) {
                 printf("something went wrong!\n");
             }
             break;
         case 3:
-            if (playSoundEffect("dependencies/assets/meow_4.mp3", GUNSHOT)) {
+            if (playSoundEffect(ASSETS_DIR "/meow_4.wav", GUNSHOT)) {
                 printf("something went wrong!\n");
             }
             break;
@@ -87,10 +87,10 @@ void bulletScan(Sprite * s, Player * pl, int bTravel, int * flashTimer, Map * m)
             srand(time(NULL));
             int a = rand() % 2;
             if (a == 0) {
-                playSoundEffect("dependencies/assets/enemy_hit_1.wav", ITEM);
+                playSoundEffect(ASSETS_DIR "/enemy_hit_1.wav", ITEM);
             }
             else if (a == 1) {
-                playSoundEffect("dependencies/assets/enemy_hit_2.wav", ITEM);
+                playSoundEffect(ASSETS_DIR "/enemy_hit_2.wav", ITEM);
             }
             //printf("sprite health: %d\n", s->health);
             // 1250 works good too
@@ -98,7 +98,7 @@ void bulletScan(Sprite * s, Player * pl, int bTravel, int * flashTimer, Map * m)
             // this really should take in the frame rate instead
             if (s->health <= 0 && s->state == 1) {
                 s->state = 0; // turn the sprite off
-                playSoundEffect("dependencies/assets/enemy_death.wav", ITEM);
+                playSoundEffect(ASSETS_DIR "/enemy_death.wav", ITEM);
                 if (pl->heartCounter == 0) {
                     pl->heartCounter++;
                 }
@@ -163,13 +163,13 @@ int movePlayer(Player * p, float deltaTime, Sprite * s, unsigned int * buttonBuf
             int r = rand() % 3;
             switch (r) {
             case 0:
-                playSoundEffect("dependencies/assets/Footstep_1.wav", -1);
+                playSoundEffect(ASSETS_DIR "/Footstep_1.wav", -1);
                 break;
             case 1:
-                playSoundEffect("dependencies/assets/Footstep_2.wav", -1);
+                playSoundEffect(ASSETS_DIR "/Footstep_2.wav", -1);
                 break;
             case 2:
-                playSoundEffect("dependencies/assets/Footstep_3.wav", -1);
+                playSoundEffect(ASSETS_DIR "/Footstep_3.wav", -1);
                 break;
             }
             
@@ -281,13 +281,13 @@ int movePlayer(Player * p, float deltaTime, Sprite * s, unsigned int * buttonBuf
             int r = rand() % 3;
             switch (r) {
             case 0:
-                playSoundEffect("dependencies/assets/Footstep_1.wav", -1);
+                playSoundEffect(ASSETS_DIR "/Footstep_1.wav", -1);
                 break;
             case 1:
-                playSoundEffect("dependencies/assets/Footstep_2.wav", -1);
+                playSoundEffect(ASSETS_DIR "/Footstep_2.wav", -1);
                 break;
             case 2:
-                playSoundEffect("dependencies/assets/Footstep_3.wav", -1);
+                playSoundEffect(ASSETS_DIR "/Footstep_3.wav", -1);
                 break;
             }
            
@@ -441,7 +441,7 @@ int movePlayer(Player * p, float deltaTime, Sprite * s, unsigned int * buttonBuf
     }
     if (*buttonBuffer & PERIOD_DOWN) {
         *buttonBuffer ^= PERIOD_DOWN;
-        if (playSoundEffect("dependencies/assets/sus.wav", STEP)) {
+        if (playSoundEffect(ASSETS_DIR "/sus.wav", STEP)) {
             printf("something went wrong!\n");
         }
     }

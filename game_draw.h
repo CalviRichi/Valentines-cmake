@@ -3,8 +3,8 @@
 
 #include "game_types.h"
 
-#include "dependencies/include/glad/glad.h"
-#include "dependencies/include/glfw3.h"
+#include "glad/glad.h"
+#include <GLFW/glfw3.h>
 
 
 /*

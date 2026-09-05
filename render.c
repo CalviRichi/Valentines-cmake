@@ -12,7 +12,7 @@
 #include "dependencies/assets/endscreen.ppm"
 #include "dependencies/assets/fruity.c"
 
-void drawGun(Player p, static unsigned int bb) {
+void drawGun(Player p, unsigned int bb) {
     if (p.hasGun) {
         
         for (int y = 0; y < 32; y++) {
@@ -31,17 +31,11 @@ void drawGun(Player p, static unsigned int bb) {
                 }
                 
 
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
                 if (!(r==255) || !(g==0) || !(b==255)) {
-
-                    glVertex2i(WINDOW_OFFSET + 350 + (x*7), 435 + (y*7)); // 8 not 7
+                    drawPixelBlock(WINDOW_OFFSET + 350 + (x*7), 435 + (y*7), STRETCH); // 8 not 7
                     //300
                 }
-                //glColor3ub(255,0,255);
-                //glVertex2d(512,324);
-                glEnd();
             }
         }
     }
@@ -403,21 +397,15 @@ void drawRays3D(Player p, Map map, int * bTravel, int depth[120]) {
             int red = tile[pixel];// swap to T_GRASS if you want 
             int green = tile[pixel + 1];
             int blue = tile[pixel + 2];
-            glPointSize(STRETCH);
-
             if (hmt == 4 || hmt > 5) {
                 if (!(red == 255) || !(green == 255) || !(blue == 255)) {
                     glColor3ub(red, green, blue);
-                    glBegin(GL_POINTS);
-                    glVertex2i(r * STRETCH + WINDOW_OFFSET + SHIFT, y + lineO);
-                    glEnd();
+                    drawPixelBlock(r * STRETCH + WINDOW_OFFSET + SHIFT, y + lineO, STRETCH);
                 }
             }
             else {
                 glColor3ub(red, green, blue);
-                glBegin(GL_POINTS);
-                glVertex2i(r * STRETCH + WINDOW_OFFSET + SHIFT, y + lineO);
-                glEnd();
+                drawPixelBlock(r * STRETCH + WINDOW_OFFSET + SHIFT, y + lineO, STRETCH);
             }
 
             ty += ty_step;
@@ -489,11 +477,8 @@ void drawRays3D(Player p, Map map, int * bTravel, int depth[120]) {
             int red = floorTile[pixel];
             int green = floorTile[pixel + 1];
             int blue = floorTile[pixel + 2];
-            glPointSize(STRETCH);
             glColor3ub(red, green, blue);
-            glBegin(GL_POINTS);
-            glVertex2i(r * STRETCH + WINDOW_OFFSET + SHIFT, x);
-            glEnd();
+            drawPixelBlock(r * STRETCH + WINDOW_OFFSET + SHIFT, x, STRETCH);
 
             // ceilings
 
@@ -501,11 +486,8 @@ void drawRays3D(Player p, Map map, int * bTravel, int depth[120]) {
             unsigned int redC = ceilingTile[pixelC];
             unsigned int greenC = ceilingTile[pixelC + 1];
             unsigned int blueC = ceilingTile[pixelC + 2];
-            glPointSize(STRETCH);
             glColor3ub(redC, greenC, blueC);
-            glBegin(GL_POINTS);
-            glVertex2i(r * STRETCH + WINDOW_OFFSET+SHIFT, SCREEN_HEIGHT - x);
-            glEnd();
+            drawPixelBlock(r * STRETCH + WINDOW_OFFSET+SHIFT, SCREEN_HEIGHT - x, STRETCH);
 
         
 
@@ -527,7 +509,7 @@ void drawRays3D(Player p, Map map, int * bTravel, int depth[120]) {
     return;
 }
 
-void drawSprite(Sprite* sp, Player p, Map m, int* flashTimer, int dt, int depth[120]) {
+void drawSprite(Sprite* sp, Player p, Map m, int* flashTimer, double dt, int depth[120]) {
 
     float scalingFactorX = (int)SCALE_X / (2 * tan(60 * DR / 2));
     float scalingFactorY = (int)SCALE_Y / (2 * tan(60 * DR / 2));
@@ -788,12 +770,8 @@ void drawSprite(Sprite* sp, Player p, Map m, int* flashTimer, int dt, int depth[
                 
                 if (!(r == 255) || !(g == 0) || !(b == 255)) { // this means don't draw
                     if (!(r == 254) && !(g == 254) && !(b == 254)){
-                        glPointSize(STRETCH);
                         glColor3ub(r, g, b);
-                        glBegin(GL_POINTS);
-                        glVertex2d((x * STRETCH) + WINDOW_OFFSET + SHIFT, screenY * STRETCH - y * STRETCH);
-                        glVertex2d((x * STRETCH) + WINDOW_OFFSET + SHIFT, screenY * STRETCH - y * STRETCH);
-                        glEnd();
+                        drawPixelBlock((x * STRETCH) + WINDOW_OFFSET + SHIFT, screenY * STRETCH - y * STRETCH, STRETCH);
                     }
                 }
 
@@ -839,14 +817,23 @@ void drawScreen(int v) {
             int green = T[pixel + 1];
             int blue = T[pixel + 2];
 
-            glPointSize(STRETCH);
             glColor3ub(red, green, blue);
-            glBegin(GL_POINTS);
-            glVertex2d(SHIFT + WINDOW_OFFSET + (x * STRETCH), y * STRETCH);
-            glEnd();
+            drawPixelBlock(SHIFT + WINDOW_OFFSET + (x * STRETCH), y * STRETCH, STRETCH);
         }
     }
 
+}
+
+// Draws a size x size filled square at (x, y). Replaces the old glPointSize+GL_POINTS
+// technique, which relied on large aliased point sizes -- macOS clamps those to 1px,
+// so this is the portable equivalent that works identically on every platform.
+static void drawPixelBlock(float x, float y, float size) {
+    glBegin(GL_QUADS);
+    glVertex2f(x, y);
+    glVertex2f(x + size, y);
+    glVertex2f(x + size, y + size);
+    glVertex2f(x, y + size);
+    glEnd();
 }
 
 void drawSide(Player p) {
@@ -855,12 +842,9 @@ void drawSide(Player p) {
 
     for (y = 0; y < SCREEN_HEIGHT; y++) {
         for (x = 0; x < SIDE_ADD; x++) {
-            glPointSize(STRETCH);
             glColor3ub(30, 30, 30);
-            glBegin(GL_POINTS);
-            glVertex2d((x + (SCREEN_WIDTH - SIDE_ADD)), y);
-            glVertex2d(x, y);
-            glEnd();
+            drawPixelBlock((x + (SCREEN_WIDTH - SIDE_ADD)), y, STRETCH);
+            drawPixelBlock(x, y, STRETCH);
         }
     }
     if (p.heartCounter > 0) {
@@ -880,11 +864,8 @@ void drawSide(Player p) {
                     int pixel = (32 * y * 3) + (x * 3);
                     int r = T[pixel]; int g = T[pixel + 1]; int b = T[pixel + 2];
                     if (!(r > 200 && g > 200)) {
-                        glPointSize(STRETCH);
                         glColor3ub(r, g, b);
-                        glBegin(GL_POINTS);
-                        glVertex2d((offsetX + 2 + x) * 3, (32*offsetY + 5 +  y) * 3);
-                        glEnd();
+                        drawPixelBlock((offsetX + 2 + x) * 3, (32*offsetY + 5 +  y) * 3, STRETCH);
                     }
 
                 }
@@ -927,46 +908,28 @@ void drawHeart(Heart h) {
             int pixel = (32 * y * 3) + (x * 3);
             int r = T[pixel]; int g = T[pixel + 1]; int b = T[pixel + 2];
             if (T == T_HEART_1 && !(r > 200 && g > 200)) {
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
-                glVertex2d((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE);
-                glEnd();
+                drawPixelBlock((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE, STRETCH);
             }
             else if (T == T_PINKHEART_1 && (!(r == 255) || !(g == 0) || !(b == 255))) {
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
-                glVertex2d((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE);
-                glEnd();
+                drawPixelBlock((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE, STRETCH);
             }
             else if (T == T_REDHEART_1 && (!(r == 255) || !(g == 0) || !(b == 255))) {
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
-                glVertex2d((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE);
-                glEnd();
+                drawPixelBlock((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE, STRETCH);
             }
             else if (T == T_BROKENHEART_1 && (!(r == 255) || !(g == 0) || !(b == 255))) {
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
-                glVertex2d((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE);
-                glEnd();
+                drawPixelBlock((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE, STRETCH);
             }
             else if (T == T_BROKENHEART_2 && (!(r == 255) || !(g == 0) || !(b == 255))) {
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
-                glVertex2d((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE);
-                glEnd();
+                drawPixelBlock((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE, STRETCH);
             }
             else if (T == T_BROKENHEART_3 && (!(r == 255) || !(g == 0) || !(b == 255))) {
-                glPointSize(STRETCH);
                 glColor3ub(r, g, b);
-                glBegin(GL_POINTS);
-                glVertex2d((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE);
-                glEnd();
+                drawPixelBlock((x + h.x_pos) * HEART_SIZE, (y + h.y_pos) * HEART_SIZE, STRETCH);
             }
         }
     }

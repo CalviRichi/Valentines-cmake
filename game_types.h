@@ -3,12 +3,11 @@
 #include <math.h>
 #include <time.h>
 //#include "dependencies/assets/textures.h"
-#include "dependencies/include/glad/glad.h"
-#include "dependencies/include/glfw3.h"
-#include "dependencies/include/SDL2/include/SDL.h"
-#include "dependencies/include/SDL2_mixer/include/SDL_mixer.h"
-
-
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <SDL2/SDL.h>
+#include <SDL_mixer.h>
+#include <string.h>
 #ifndef GAME_TYPES_H
 #define GAME_TYPES_H
 
@@ -49,6 +48,12 @@
 #define P3 3*PI/2 // 3 pi over 2
 #define DR 0.0174533 // one degree in radians 
 #define MIN_DISTANCE 30 // the minimum distance to a wall
+
+#define MAX_CACHED_SOUNDS 64
+
+static char* cachedPaths[MAX_CACHED_SOUNDS];
+static Mix_Chunk* cachedChunks[MAX_CACHED_SOUNDS];
+static int cachedCount = 0;
 
 typedef enum
 { // enum used to set button buffer
@@ -171,20 +176,36 @@ static float dist(float ax, float ay, float bx, float by, float ang) {
     return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
-static int playSoundEffect(char* s, int channel) {
 
-    Mix_Chunk* sound = Mix_LoadWAV(s);
-    if (!sound) {
-        printf("Failed to load sound: %s\n", Mix_GetError());
-        return 1;
+static int playSoundEffect(char* s, int channel) {
+    Mix_Chunk* sound = NULL;
+
+    // Check cache first
+    for (int i = 0; i < cachedCount; i++) {
+        if (strcmp(cachedPaths[i], s) == 0) {
+            sound = cachedChunks[i];
+            break;
+        }
+    }
+
+    // Not cached yet -- load and store it
+    if (sound == NULL) {
+        sound = Mix_LoadWAV(s);
+        if (!sound) {
+            printf("Failed to load sound: %s\n", Mix_GetError());
+            return 1;
+        }
+        if (cachedCount < MAX_CACHED_SOUNDS) {
+            cachedPaths[cachedCount] = strdup(s);
+            cachedChunks[cachedCount] = sound;
+            cachedCount++;
+        }
     }
 
     // Play the sound on the first available channel (-1)
-
     Mix_PlayChannel(channel, sound, 0);
     return 0;
 }
-
 // ------------- MAP FUNCTIONS -- DEFINED WITHIN MAP.C
 
 void drawMap2D(Map m);
@@ -213,7 +234,7 @@ int moveSprite(Sprite * s, float dt, Player * p, Map m);
 Heart* newHeart(float x_pos, float y_pos);
 Heart* HeartAdd(Heart* tail);
 void heartMove(Heart* h, char heartMoving, char heartFlip);
-void addAHeart(Heart* h, static unsigned int * buttonBuffer);
+void addAHeart(Heart* h, unsigned int * buttonBuffer);
 void HeartRemove(Heart* sCopy, Heart** headHeart);
 
 #endif

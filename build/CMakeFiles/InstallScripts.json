@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/calvinrichards/dev/personal/CoderSchool Interview/Valentines/build/cmake_install.cmake",
+		"/Users/calvinrichards/dev/personal/CoderSchool Interview/Valentines/build/_deps/glfw-build/cmake_install.cmake",
+		"/Users/calvinrichards/dev/personal/CoderSchool Interview/Valentines/build/_deps/glfw-build/src/cmake_install.cmake",
+		"/Users/calvinrichards/dev/personal/CoderSchool Interview/Valentines/build/_deps/sdl2-build/cmake_install.cmake",
+		"/Users/calvinrichards/dev/personal/CoderSchool Interview/Valentines/build/_deps/sdl2_mixer-build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

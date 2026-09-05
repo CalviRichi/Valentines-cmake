@@ -266777,7 +266777,7 @@ const int S_COVER[] = {
 };
 
 // Array from title.ppm
-const S_TITLE[] = {
+const int S_TITLE[] = {
 58,
 68,
 102,

@@ -130,7 +130,7 @@ void heartMove(Heart* h, char heartMoving, char heartFlip) {
         if (h->x_direction) { // moving right
             if (h->x_pos >= HEART_X_MAX) {
                 h->x_direction ^= TRUE;
-                playSoundEffect("dependencies/assets/heart_wall.wav", -1);
+                playSoundEffect(ASSETS_DIR "/heart_wall.wav", -1);
             }
             else {
                 h->x_pos += HEART_SPEED;
@@ -139,7 +139,7 @@ void heartMove(Heart* h, char heartMoving, char heartFlip) {
         else { // moving left
             if (h->x_pos <= HEART_X_MIN) {
                 h->x_direction ^= TRUE;
-                playSoundEffect("dependencies/assets/heart_wall.wav", -1);
+                playSoundEffect(ASSETS_DIR "/heart_wall.wav", -1);
             }
             else {
                 h->x_pos -= HEART_SPEED;
@@ -149,7 +149,7 @@ void heartMove(Heart* h, char heartMoving, char heartFlip) {
         if (h->y_direction) { // moving down
             if (h->y_pos >= HEART_Y_MAX) {
                 h->y_direction ^= TRUE;
-                playSoundEffect("dependencies/assets/heart_wall.wav", -1);
+                playSoundEffect(ASSETS_DIR "/heart_wall.wav", -1);
             }
             else {
                 h->y_pos += HEART_SPEED;
@@ -158,7 +158,7 @@ void heartMove(Heart* h, char heartMoving, char heartFlip) {
         else { // moving up
             if (h->y_pos <= HEART_Y_MIN) {
                 h->y_direction ^= TRUE;
-                playSoundEffect("dependencies/assets/heart_wall.wav", -1);
+                playSoundEffect(ASSETS_DIR "/heart_wall.wav", -1);
             }
             else {
                 h->y_pos -= HEART_SPEED;
@@ -168,7 +168,7 @@ void heartMove(Heart* h, char heartMoving, char heartFlip) {
     
 }
 
-void addAHeart(Heart* h, static unsigned int * buttonBuffer) {
+void addAHeart(Heart* h, unsigned int * buttonBuffer) {
     Heart* he = h;
     if (*buttonBuffer & ADD_HEART) {
         if (he) {

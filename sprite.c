@@ -152,17 +152,18 @@ int moveSprite(Sprite * s, float dt, Player * pl, Map m) {
     }
     
     float d = dist(s->x, s->y, p.plX, p.plY, 0);
-
+    //printf("d=%f interact=%f ATTACK_RATE=%d\n", d, interact, ATTACK_RATE); // for debug
+    //printf("d=%f interact=%f heartCounter=%d\n", d, interact, pl->heartCounter);
     if (interact > ATTACK_RATE) {
         srand(time(NULL));
         int a = rand() % 5;
         if (a == 1) {
             int b = rand() % 2;
             if (b == 0) {
-                playSoundEffect("dependencies/assets/enemy_groan_1.wav", GUNSHOT);
+                playSoundEffect(ASSETS_DIR "/enemy_groan_1.wav", GUNSHOT);
             }
             else if (b == 1) {
-                playSoundEffect("dependencies/assets/enemy_groan_2.wav", GUNSHOT);
+                playSoundEffect(ASSETS_DIR "/enemy_groan_2.wav", GUNSHOT);
             }
         }
         //interact = 0;
@@ -173,10 +174,10 @@ int moveSprite(Sprite * s, float dt, Player * pl, Map m) {
             srand(time(NULL));
             int a = rand() % 2;
             if (a == 0) {
-                playSoundEffect("dependencies/assets/enemy_attack_1.wav", -1);
+                playSoundEffect(ASSETS_DIR "/enemy_attack_1.wav", -1);
             }
             else if (a == 1) {
-                playSoundEffect("dependencies/assets/enemy_attack_2.wav", -1);
+                playSoundEffect(ASSETS_DIR "/enemy_attack_2.wav", -1);
             }
             
             pl->heartCounter--;
@@ -185,15 +186,22 @@ int moveSprite(Sprite * s, float dt, Player * pl, Map m) {
             srand(time(NULL));
             int a = rand() % 2;
             if (a == 0) {
-                playSoundEffect("dependencies/assets/enemy_attack_1.wav", -1);
+                playSoundEffect(ASSETS_DIR "/enemy_attack_1.wav", -1);
             }
             else if (a == 1) {
-                playSoundEffect("dependencies/assets/enemy_attack_2.wav", -1);
+                playSoundEffect(ASSETS_DIR "/enemy_attack_2.wav", -1);
             }
             interact = 0;
             return 1;
         }
         interact = 0;
+    }
+    else {
+    
+        //printf("d: %f, interact: %f\n", d, interact);
+
+
+
     }
 
     return 0;
@@ -213,7 +221,7 @@ int moveSprite(Sprite * s, float dt, Player * pl, Map m) {
            
             if (pl->heartCounter < 9) { 
                 pl->heartCounter++;
-                playSoundEffect("dependencies/assets/coin.wav", ITEM);
+                playSoundEffect(ASSETS_DIR "/coin.wav", ITEM);
             }
             
         }
@@ -229,7 +237,7 @@ int moveSprite(Sprite * s, float dt, Player * pl, Map m) {
             }
             pl->hasGun = TRUE;
             
-            playSoundEffect("dependencies/assets/item.wav", GUNSHOT);
+            playSoundEffect(ASSETS_DIR "/item.wav", GUNSHOT);
         }
        
         return 0;

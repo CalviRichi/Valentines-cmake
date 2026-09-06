@@ -452,7 +452,7 @@ int main()
 
 
     printf("Welcome to the Steal My Heart!!!\n");
-    printf("Happy Valentine's Day baby\n\n");
+    //printf("Happy Valentine's Day baby\n\n");
     printf("Press space for something fun to happen\n\n");
 
 
@@ -706,9 +706,9 @@ int main()
                         playSoundEffect(ASSETS_DIR "/item.wav", ITEM);
                         //printf("test\n");
                         gamestate = END_SCREEN;
-                        printf("\nI love you baby, you're so so good and smart\n");
-                        printf("\nI hope you had fun, I really really care about you");
-                        printf("\nand I just want to make you smile :)\n\n");
+                        //printf("\nI love you baby, you're so so good and smart\n");
+                        //printf("\nI hope you had fun, I really really care about you");
+                        //printf("\nand I just want to make you smile :)\n\n");
 
                         printf("You can press 'Enter' to replay or 'Escape' to quit\n\n");
                         Mix_ResumeMusic();
@@ -748,7 +748,7 @@ int main()
                     
                     gamestate = GAME_OVER;
                     playSoundEffect(ASSETS_DIR "/game_over.wav", STEP);
-                    printf("\nIt'll be ok <3 --- You can press 'Enter' to play again\n\n");
+                    //printf("\nIt'll be ok <3 --- You can press 'Enter' to play again\n\n");
                     deathTrigger = 0;
                 }
 
